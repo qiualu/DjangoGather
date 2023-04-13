@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>页面L01Head</title>
+    <!--    导入 静态文件-->
+    <link rel="stylesheet" href="/static/demo/css/mystyle.css" />
+    <script src="/static/demo/js/vue.min.js"></script>
+    <!--  网络请求  -->
+    <script src="/static/demo/js/axios.min.js"></script>
+</head>
+<body>
+    <div id="Home">
+        <h1>YM</h1>
+        <img src="/static/demo/images/wd1.jpg" />
+
+        <hr />
+
+        <p v-if="movies.length == 0">尚未获取</p>
+
+        <div class="imglist">
+
+            <!-- <img src="img/wd1.jpg" > -->
+
+            <img v-for="img in movies" v-bind:src="apiurl+img.pic" alt="" >
+
+        </div>
+
+        <button v-on:click="getData()">按钮</button>
+
+<!--        <h1>site : {{site}}</h1>  {}{} 重叠  失效-->
+        <h1>url : {{url}}</h1>
+        <h1>Alexa : {{alexa}}</h1>
+
+    </div>
+
+
+    <div id="vue_det">
+
+    </div>
+
+    <script type="text/javascript">
+    var data = { site: "菜鸟教程", url: "www.runoob.com", alexa: 10000}
+    var vm = new Vue({
+        el:'#Home',
+        data:{
+            apiurl:"https://api.dweb.club/",
+            img:['img/wd1.jpg','img/wd2.jpg','img/wd3.jpg'],
+            movies:[],
+
+            site: "菜鸟教程",
+            url: "www.runoob.com",
+            alexa: 10000,
+        },
+        methods:{
+            getData(){
+                console.log('开始获取');
+                var self = this
+                axios({
+                    method:'get',
+                    type:'json',
+                    url:'https://api.dweb.club/dweb-api/get-index-data'
+                }).then(function(res){
+                    console.log(res.data.newsdata);
+                    self.movies = res.data.newsdata;
+
+                    console.log("self.movies - > ",self.movies.length);
+
+                })
+            }
+        },
+    })
+
+    // 它们引用相同的对象！
+    document.write(vm.site === data.site) // true
+	document.write("<br>")
+    // 设置属性也会影响到原始数据
+    vm.site = "Runoob"
+    document.write(data.site + "<br>") // Runoob
+
+    // ……反之亦然
+    data.alexa = 1234
+    document.write(vm.alexa) // 1234
+
+
+</script>
+
+</body>
+</html>

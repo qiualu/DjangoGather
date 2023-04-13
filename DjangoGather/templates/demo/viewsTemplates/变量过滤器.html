@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>变量过滤器</title>
+</head>
+<body>
+
+    <p> 普通   变量 :  {{ hello }}</p>
+    <p> 过滤器 变量 :  {{ hello|lower }}   --->  文档大写转换文本为小写。 </p>
+
+    <p> 普通   变量 :  {{ putong }}</p>
+    <p> 过滤器1 变量 :  {{ putong|first|upper }}   --->  第一个元素并将其转化为大写。 </p>
+    <p> 过滤器2 变量 :  {{ putong|upper }}   --->  元素将其转化为大写。 </p>
+    <p> 过滤器3 变量 :  {{ putong|first }}   --->  只要第一个字符 </p>
+    <p> 过滤器4 变量 :  {{ putong|length }}   --->  长度 </p>
+
+
+    <p> 普通   变量 :  {{ leghtStr }}</p>
+    <p> 过滤器1 变量 :  {{ leghtStr|truncatewords:"5" }}   --->  这个将显示变量 bio 的前5个词。 </p>
+    <!--其他过滤器：-->
+    <p> 过滤器2 变量 :  {{ leghtStr|addslashes }}   --->   添加反斜杠到任何反斜杠、单引号或者双引号前面。 </p>
+    <p> 过滤器3 变量 :  {{ leghtStr|truncatechars:"5" }}   --->  555 如果字符串包含的字符总个数多于指定的字符数量，那么会被截断掉后面的部分。 </p>
+
+<!--    date : 按指定的格式字符串参数格式化 date 或者 datetime 对象，实例：-->
+<!--length : 返回变量的长度。-->
+    <p>
+default  <br>
+default 为变量提供一个默认值。 <br>
+如果 views 传的变量的布尔值是 false，则使用指定的默认值。 <br>
+以下值为 false： <br>
+0  0.0  False  0j  ""  []  ()  set()  {}  None <br>
+
+ <br>
+        \{{ name|default:"菜鸟教程666" }\}
+ <br>
+   </p>
+
+<!-- ==============================================-->
+
+<p> 普通   变量 :  {{ timeD }} </p>
+<p> 过滤器1 变量  {{ timeD|date:"F j, Y" }}         ---- > date : 按指定的格式字符串参数格式化 date 或者 datetime 对象，实例：</p>
+<p> 过滤器1 变量  {{ timeD|date:"Y-m-d" }}         ---- > date : 按指定的格式字符串参数格式化 date 或者 datetime 对象，实例：</p>
+
+
+<p> 普通   变量 :  {{ views_str }} </p>
+<p> 过滤器1 变量  {{ views_str|safe  }}         ---- > 将字符串标记为安全，不需要转义。</p>
+
+    <p>条件判断</p>
+
+{% if condition %}
+    <p>if  condition</p>
+{% endif %}
+
+{% if condition == 0 %}
+    <p>if  condition</p>
+{% endif %}
+
+
+    {% if condition1 %}
+       ... display 1
+    {% elif condition2 %}
+       ... display 2
+    {% else %}
+       ... display 3
+    {% endif %}
+
+    <ul>
+    {% for athlete in forList %}
+        <li>{{ athlete }}</li>
+
+
+
+    {% endfor %}
+
+    </ul>
+
+    <p>
+        forloop.counter: 顺序获取循环序号，从 1 开始计算 <br>
+        forloop.counter0: 顺序获取循环序号，从 0 开始计算 <br>
+        forloop.revcounter: 倒叙获取循环序号，结尾序号为 1 <br>
+        forloop.revcounter0: 倒叙获取循环序号，结尾序号为 0 <br>
+        forloop.first（一般配合if标签使用）: 第一条数据返回 True，其他数据返回 False <br>
+        forloop.last（一般配合if标签使用）: 最后一条数据返回 True，其他数据返回 False <br>
+    </p>
+
+<!--注释标签-->
+<!--Django 注释使用 {# #}。-->
+{# 这是一个注释 #}
+
+<!--include 标签-->
+<!--{_{_  include  _}_} 标签允许在模板中包含其它的模板的内容。-->
+<!--下面这个例子都包含了 nav.html 模板：-->
+
+<!-- {_{_  include "nav.html"  _}_}-->
+
+
+<!--    csrf_token-->
+<!--csrf_token 用于form表单中，作用是跨站请求伪造保护。-->
+
+<!--如果不用｛% csrf_token %｝标签，在用 form 表单时，要再次跳转页面会报403权限错误。-->
+
+用了｛% csrf_token %｝标签，在 form 表单提交数据时，才会成功。
+
+
+    <h6>在使用自定义标签和过滤器前，要在 html 文件 body 的最上方中导入该 py 文件</h6>
+    {% load my_tags %}
+    <p> my_filter :  {{ 11|my_filter:22 }} </p>
+    <p> my_tag1  :   {% my_tag1 11 22 33 %} </p>
+    <p> my_tag1  :   {% my_html "zzz" "xxx" %} </p>
+
+
+
+    <h6><a href='/demo'>DomeHome</a></h6>
+</body>
+</html>

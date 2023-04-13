@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>imgDowmload</title>
+
+    <script src="/static/image/js/axios.min.js"></script>
+    <script src="/static/image/js/download.js"></script>
+
+</head>
+<body id="Home">
+<div class="doc">
+    <h6>图片下载</h6>
+    <img id="img_data" src="/static/demo/images/wd1.jpg">
+
+<!--    <input type="button" onclick="test()" value="点击保存">-->
+    <button onclick="test()">保存</button>
+</div>
+
+<img id="img_data" src="/statics/media/img/qqcy_1.jpg">
+
+
+<!--  -->
+
+<script>
+
+    var objFile = document.getElementById("img_data");
+	var formData = new FormData(objFile[0]);
+
+    function test(){
+            console.log("您点击保存了按钮");
+            download(res.data, "awesome.png", "image/png");
+        }
+
+<!--    axios.get(someUrl, { responseType: 'blob'}).then(res => {-->
+<!--      download(res.data, "awesome.png", "image/png");-->
+<!--    })-->
+</script>
+
+</body>
+</html>

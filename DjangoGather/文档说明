@@ -1,0 +1,22 @@
+
+# 创建应用
+python manage.py startapp Image
+
+目录
+templates 模版
+templatetags 自定义标签和过滤器
+static 静态文件
+DjangoGather 工程设置文件
+应用app
+*** demo    模版 案例
+
+*** Image   图片应用
+    创建二维码
+    pip install qrcode
+    pip install six
+    pip install PyHamcrest
+
+
+数据库迁移
+python manage.py makemigrations
+python manage.py migrate

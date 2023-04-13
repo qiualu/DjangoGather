@@ -1,0 +1,27 @@
+#Home {
+	width: 300px;
+	height: auto;
+	border: 1px solid #000;
+	margin: 0 auto;
+	text-align: center;
+}
+
+
+#Home img {
+	width: 80px;
+	height: 80px;
+	border-radius: 40px;
+	margin: 0 0;
+}
+
+#Home .imglist img{
+	width: 120px;
+	height: 120px;
+	border-radius: 0px;
+	border: 1px solid #000;
+
+}
+
+
+
+
