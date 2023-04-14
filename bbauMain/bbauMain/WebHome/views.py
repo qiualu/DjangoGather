@@ -11,17 +11,63 @@ shbbanben = {
     3 : 1,
 }
 
+# # 'http://127.0.0.1:8000/'
+# def index(request):
+#     print("=== index ===")
+#
+#     # data = "2022 Home:" + str(time.time())
+#     data = {
+#         'name': 'John',
+#         'age': 30,
+#         'city': 'New York'
+#     }
+#     # return HttpResponse(data) # 返回字符串
+#     return JsonResponse(data)   # 返回json
+
 
 def index(request):
-    
-    # data = "2022 Home:" + str(time.time())
-    data = {
-        'name': 'John',
-        'age': 30,
-        'city': 'New York'
-    }
-    # return HttpResponse(data) # 返回字符串
-    return JsonResponse(data)   # 返回json
+    if request.method == 'OPTIONS':
+        print("=== OPTIONS ===")
+        # 处理预检请求
+        response = HttpResponse(status=204)
+        response['Access-Control-Allow-Origin'] = '*' # # 允许所有来源跨域访问
+        response['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'  # 允许 GET、POST、PUT、DELETE 方法
+        response['Access-Control-Allow-Headers'] = 'Accept,yhname' # 允许 Content-Type 请求头 ,Content-Type,
+        response['Access-Control-Allow-Credentials'] = 'true'  # 允许发送 Cookie 凭证信息
+        return response
+    elif request.method == 'GET':
+        print("=== GET ===")
+        # 获取请求头信息
+        accept_header = request.META.get('HTTP_ACCEPT')
+        yhname_header = request.META.get('HTTP_YHNAME')
+
+        # 获取请求网址
+        url = request.build_absolute_uri()
+
+        # 获取请求参数
+        params = request.GET
+        print("params :", params["name"],accept_header,yhname_header)
+        data = {
+            'name': 'John',
+            'age': 30,
+            'city': 'New York',
+            'accept_header': accept_header,  # 将请求头信息添加到响应数据中
+            'yhname_header': yhname_header,
+            'url': url,  # 将请求网址添加到响应数据中
+            'params': dict(params)  # 将请求参数添加到响应数据中
+        }
+        response = JsonResponse(data, safe=False)
+        response['Access-Control-Allow-Origin'] = '*'
+        response['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
+        response['Access-Control-Allow-Headers'] = 'Accept,yhname'
+        return response
+
+
+
+
+def showHead(request):
+    print("=== showHead ===")
+    return JsonResponse({'name': 'John', 'age': 30, 'city': 'New York'})
 
 
 def showimage(request,data):

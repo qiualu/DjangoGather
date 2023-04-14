@@ -127,6 +127,32 @@ STATIC_URL = '/static/'
 
 
 CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_METHODS = (
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+    'VIEW',
+)
+
+CORS_ALLOW_HEADERS = (
+    'XMLHttpRequest',
+    'X_FILENAME',
+    'accept-encoding',
+    'authorization',
+    'Content-Type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+    'Pragma',
+    'yhname',
+)
+
+
 # 以上配置将允许所有来源的跨域请求。如果只想允许特定的来源，可以将CORS_ORIGIN_ALLOW_ALL设置为False，并添加CORS_ORIGIN_WHITELIST配置项。
 # CORS_ORIGIN_ALLOW_ALL = False
 #

@@ -13,7 +13,7 @@ urlpatterns = [
 
     url('getBin/(.+)$', views.showimage),# 显示图片
     url('getBinBb/(.+)$', views.getBinBb),# 显示图片
-    
+    url('showHead/',  views.showHead),# 显示头
     url(r'^$', views.index),  # #添加index/路径配置
 
 ]
