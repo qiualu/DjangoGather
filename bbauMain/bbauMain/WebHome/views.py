@@ -2,7 +2,13 @@ from django.shortcuts import render
 from django.http import HttpResponse
 # Create your views here.
 from django.http import JsonResponse
+# 禁用缓存
+from django.views.decorators.cache import never_cache
+from django.middleware.csrf import get_token
 
+
+
+import json
 import time
 
 shbbanben = {
@@ -26,13 +32,40 @@ shbbanben = {
 
 
 def index(request):
+    data = [1, 2, 3, 4]
+    return render(request, 'WebHome/home.html', {'data': data})
+
+
+# 将所有视图函数都加上@never_cache装饰器 # 禁用缓存
+@never_cache
+def chat(request):
+    if request.method == 'GET':
+        token = get_token(request)
+        data = [1, 2, 3, 4]
+        print("token: ", token)
+        return render(request, 'WebHome/chat.html', {'data': data,'csrf_token': token})
+    elif request.method == 'POST':
+        prompt = request.POST.get('prompt', '')  # 获取请求中的 prompt 参数
+
+        data_list = json.loads(prompt)
+        token = request.COOKIES.get('csrftoken')
+        print(data_list,type(data_list),token)
+
+        response = {}
+        response['content'] = 'Hello world'  # 假设返回的内容是 "Hello world"
+        response['test'] = "测试字段"
+        return JsonResponse(response)
+    else:
+        return HttpResponse("404 请求异常")  # 返回字符串
+
+def showHead(request):
     if request.method == 'OPTIONS':
         print("=== OPTIONS ===")
         # 处理预检请求
         response = HttpResponse(status=204)
-        response['Access-Control-Allow-Origin'] = '*' # # 允许所有来源跨域访问
+        response['Access-Control-Allow-Origin'] = '*'  # # 允许所有来源跨域访问
         response['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'  # 允许 GET、POST、PUT、DELETE 方法
-        response['Access-Control-Allow-Headers'] = 'Accept,yhname' # 允许 Content-Type 请求头 ,Content-Type,
+        response['Access-Control-Allow-Headers'] = 'Accept,yhname'  # 允许 Content-Type 请求头 ,Content-Type,
         response['Access-Control-Allow-Credentials'] = 'true'  # 允许发送 Cookie 凭证信息
         return response
     elif request.method == 'GET':
@@ -43,10 +76,9 @@ def index(request):
 
         # 获取请求网址
         url = request.build_absolute_uri()
-
         # 获取请求参数
         params = request.GET
-        print("params :", params["name"],accept_header,yhname_header)
+        print("params :", params["name"], accept_header, yhname_header)
         data = {
             'name': 'John',
             'age': 30,
@@ -61,14 +93,6 @@ def index(request):
         response['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
         response['Access-Control-Allow-Headers'] = 'Accept,yhname'
         return response
-
-
-
-
-def showHead(request):
-    print("=== showHead ===")
-    return JsonResponse({'name': 'John', 'age': 30, 'city': 'New York'})
-
 
 def showimage(request,data):
   
