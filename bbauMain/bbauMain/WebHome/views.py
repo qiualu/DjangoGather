@@ -36,27 +36,6 @@ def index(request):
     return render(request, 'WebHome/home.html', {'data': data})
 
 
-# 将所有视图函数都加上@never_cache装饰器 # 禁用缓存
-@never_cache
-def chat(request):
-    if request.method == 'GET':
-        token = get_token(request)
-        data = [1, 2, 3, 4]
-        print("token: ", token)
-        return render(request, 'WebHome/chat.html', {'data': data,'csrf_token': token})
-    elif request.method == 'POST':
-        prompt = request.POST.get('prompt', '')  # 获取请求中的 prompt 参数
-
-        data_list = json.loads(prompt)
-        token = request.COOKIES.get('csrftoken')
-        print(data_list,type(data_list),token)
-
-        response = {}
-        response['content'] = 'Hello world'  # 假设返回的内容是 "Hello world"
-        response['test'] = "测试字段"
-        return JsonResponse(response)
-    else:
-        return HttpResponse("404 请求异常")  # 返回字符串
 
 def showHead(request):
     if request.method == 'OPTIONS':

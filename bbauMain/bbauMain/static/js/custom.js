@@ -73,6 +73,26 @@ $(document).ready(function() {
     chatWindow.animate({ scrollTop: chatWindow.prop('scrollHeight') }, 500);
   }
 
+  function addMessageStream(messageStream) {
+
+
+    var messageBubbles = document.querySelectorAll('.message-bubble');
+    var lastMessageText = messageBubbles[messageBubbles.length - 1].querySelector('.message-text');
+
+    var escapedMessage;
+//        var divElement = document.createElement('div');
+//        divElement.innerHTML = escapeHtml(messageStream); // 对文本进行转义
+    escapedMessage= escapeHtml(messageStream);
+//        divElement.style.display = 'inline-block';
+//    lastMessageText.innerHTML = lastMessageText.innerHTML + escapedMessage; // 清空消息气泡中的内容
+    lastMessageText.innerHTML = escapedMessage; // 清空消息气泡中的内容
+    //lastMessageText.appendChild(divElement); // 直接插入到最后一个消息气泡中的 .message-text 元素中
+
+    lastMessageText.animate({ scrollTop: chatWindow.prop('scrollHeight') }, 500);
+}
+
+
+  // 发送消息到服务器
   // 请求失败不用转义html
   function addFailMessage(message) {
     $(".answer .tips").css({"display":"none"});      // 打赏卡隐藏
@@ -81,18 +101,12 @@ $(document).ready(function() {
     chatWindow.append(messageElement);
     chatWindow.animate({ scrollTop: chatWindow.prop('scrollHeight') }, 500);
   }
-  
-  // 处理用户输入
+
   chatBtn.click(function() {
 
-
-
-    // 解绑键盘事件
-    chatInput.off("keydown",handleEnter);
-    
     // ajax上传数据
     var data = {}
-   
+
     // 判断是否使用自己的api key
     if ($(".key .ipt-1").prop("checked")){
       var apiKey = $(".key .ipt-2").val();
@@ -125,46 +139,63 @@ $(document).ready(function() {
 
     // 收到回复前让按钮不可点击
     chatBtn.attr('disabled',true)
+    console.log("YL messages5512 : ",messages)
+    console.log("YL messages5333 : ",message)
 
-    data["prompt"] = JSON.stringify(messages)
+    data["prompt"] = message // JSON.stringify(messages)
+    data["id"] = id
 
-    // 发送信息到后台
-    $.ajax({
-      url: '/chat/',
-      method: 'POST',
-      data: data,
 
-        headers: {
-            'X-CSRFToken': getCookie('csrftoken') // Get the 'csrftoken' value from the cookie
-        },
+    var messageStream = ""
+    addMessage(messageStream,"chatgpt.png");
 
-      success: function(res) {
-        if(res.hasOwnProperty("error")){
-          addFailMessage('<p>' + res.error.type + " : " + res.error.message + '</p>');
-          chatBtn.attr('disabled',false)
-          chatInput.on("keydown",handleEnter);
-          messages.pop() // 失败就让用户输入信息从数组删除
-        }else{
 
-            console.log("YL res : ",res.test)
+    var setTime = 1
 
-          addMessage(res.content,"chatgpt.png");
-          // 收到回复，让按钮可点击
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/gpt/chat/', true);
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 3) {
+            // 当readyState为3时，表示已经接收到了部分的返回数据
+//             console.log("ajax : ",xhr.responseText);
+            //messageStream += xhr.responseText;
+            addMessageStream(xhr.responseText)
+//            addMessageStream(messageStream);
+//            addMessageStream(messageStream,"chatgpt.png");
+            // 这里可以将接收到的数据进行处理
+        } else if (xhr.readyState === 4) {
+            // 当readyState为4时，表示已经接收到了所有的返回数据
+//            console.log(xhr.responseText);
+            // 这里可以对最终的数据进行处理
+            // 收到回复，让按钮可点击
           chatBtn.attr('disabled',false)
           // 重新绑定键盘事件
           chatInput.on("keydown",handleEnter);
-          // 将回复添加到数组
-          messages.push(res)
         }
-      },
-      error: function(jqXHR, textStatus, errorThrown) {
-        addFailMessage('<p>' + '出错啦！请稍后再试!' + '</p>');
-        chatBtn.attr('disabled',false)
-        chatInput.on("keydown",handleEnter);
-        messages.pop() // 失败就让用户输入信息从数组删除
-      }
-    });
+    };
+    xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken')); // 添加CSRF token
+    var data = {
+        "prompt": message,
+        "id": id
+    };
+
+    xhr.send(JSON.stringify(data)); // 发送JSON格式的数据
+
   });
+
+
+
+    function escapeHtml(text) {
+      var map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+      };
+      return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+    }
+
 
   // Enter键盘事件
   function handleEnter(e){

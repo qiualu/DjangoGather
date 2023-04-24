@@ -14,7 +14,6 @@ urlpatterns = [
     url('getBin/(.+)$', views.showimage),# 显示图片
     url('getBinBb/(.+)$', views.getBinBb),# 显示图片
     url('showHead/',  views.showHead),# 显示头
-    url('chat/',  views.chat,name='chat'),
     url(r'^$', views.index),  # #添加index/路径配置
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)  # 这句话是用来指定和映射静态文件的路径

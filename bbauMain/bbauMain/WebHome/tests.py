@@ -2,14 +2,13 @@ from django.test import TestCase
 
 # Create your tests here.
 
-
+import ssl
 import requests
-import json,random
+import json,random,socket
 
 
 id = random.getrandbits(64)
 print(id)
-url = "https://api.aichatos.cloud/api/generateStream"
 
 headers = {
         "Accept": "application/json, text/plain, */*",
@@ -24,11 +23,11 @@ headers = {
         "Sec-Ch-Ua-Platform": "\"Windows\"",
     }
 
-content = "冬天的冷可以保存到夏天吗" #input("请输入需要请问的问题:")
+content = "怎么设计一款自动化的机器" #input("请输入需要请问的问题:")
 
 data = {
         "prompt": content,
-        "userId": "#/chat/154545645",  # + str(id),
+        "userId": "#/chat/1524511515",# + str(id),
         "network": True,
         "apikey": "",
         "system": "",
@@ -61,7 +60,31 @@ def gameup():
     print("游戏开始上传服务器 : ", response.text)
     print("--------------------------------------")
 
+url = "https://api.aichatos.cloud/api/generateStream"
 
-response = requests.request("POST", url, headers=headers,  json=data)  # data=json.dumps(data)
-print(response.text)
+
+import ssl
+
+context = ssl.create_default_context()
+context.check_hostname = True
+context.verify_mode = ssl.CERT_REQUIRED
+
+# url = "http://39.108.51.207/bracelet-portal/api/v1/game/permission/checkAuth"
+response = requests.request("POST", url,headers = headers, json=data,verify=True)
+# ret = requests.post(url, data=data, verify=False, headers=headers)
+print("游戏开始上传服务器 : ", response.text)
+# ret = requests.post(url, data=data, verify=False, headers=headers, timeout=60, context=context)
+# print("游戏开始上传服务器 : ", ret.text)
+
+# context = ssl.create_default_context()
+# context.check_hostname = False   # 禁用主机名验证
+# context = ssl.create_default_context()
+# context.check_hostname = False   # 禁用主机名验证
+#
+# response = requests.request("POST", url, headers=headers,  json=data)  # data=json.dumps(data)
+# response = requests.post(
+#     url, json=data, headers=headers,
+#     timeout=30, verify=context
+# )
+# print(response.text)
 

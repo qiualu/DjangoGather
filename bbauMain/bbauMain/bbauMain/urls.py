@@ -20,7 +20,7 @@ from django.urls import include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('ArduinoUpdate/', include("ArduinoUpdate.urls")),
-    path('gpt/', include("ArduinoUpdate.urls")),
+    path('gpt/', include("GptApp.urls")),
     path(r'', include("WebHome.urls")),  # #添加index/路径配置
 ]
 

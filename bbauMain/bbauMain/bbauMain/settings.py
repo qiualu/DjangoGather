@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'ArduinoUpdate',
     'WebHome',
     'corsheaders', # 跨域访问
+    'GptApp',
 ]
 
 MIDDLEWARE = [
